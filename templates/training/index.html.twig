@@ -32,6 +32,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-light" href="/contact" tabindex="-1" aria-disabled="true">Contact</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="{{ path ('login') }}" tabindex="-1" aria-disabled="true">inloggen</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -52,65 +55,24 @@
 
 
     <!-- Cards -->
-    <div class="card-group">
+    {% for training in trainings %}
         <div class="container">
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Training 1</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque arcu felis, tristique vel ligula eget, blandit mattis diam. Donec ultricies nisi nec ante vulputate, at vulputate neque volutpat. Aenean commodo velit eu arcu feugiat aliquet. Morbi condimentum quis lectus ac laoreet. Donec commodo ipsum id mauris interdum, quis blandit turpis iaculis. Nam posuere, sem nec porttitor.</p>
-                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
+            <div class="col">
+            <div class="card" >
+                <img class="card-img-top" src="{{ asset(training.image) }}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ training.name }}</h5>
+                    <p class="card-text">{{ training.description }}</p>
+                    <p class="card-text">{{ training.duration }}</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
             </div>
         </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Training 2</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque arcu felis, tristique vel ligula eget, blandit mattis diam. Donec ultricies nisi nec ante vulputate, at vulputate neque volutpat. Aenean commodo velit eu arcu feugiat aliquet. Morbi condimentum quis lectus ac laoreet. Donec commodo ipsum id mauris interdum, quis blandit turpis iaculis. Nam posuere, sem nec porttitor.</p>
-                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card">
-            <img src="..." class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Training 3</h5>
-                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque arcu felis, tristique vel ligula eget, blandit mattis diam. Donec ultricies nisi nec ante vulputate, at vulputate neque volutpat. Aenean commodo velit eu arcu feugiat aliquet. Morbi condimentum quis lectus ac laoreet. Donec commodo ipsum id mauris interdum, quis blandit turpis iaculis. Nam posuere, sem nec porttitor.</p>
-                <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        </div>
-    </div>
+    {% endfor %}
 
-    <!-- Footer --><br>
-    <footer class="container-fluid bg-dark text-light">
-        <div class="row">
-            <div class="col-6">
-                <p class="text-center"><br>
-                    <strong class="text-center">Contactgegevens</strong>
-                <p class="text-center">Training Factory<br>
-                    Trainingsweg 1<br>
-                    1111AA Chest<br>
-                    sport@gmail.com<br>
-                    06 12345678<br>
-                </p>
-                </p>
-            </div>
 
-            <div class="col-6">
-                <p class="text-center"><br>
-                    <strong class="text-center">Openingstijden</strong>
-                <p class="text-center">Maandag: Gesloten<br>
-                    Dinsdag: 16:00 - 22:00<br>
-                    Woensdag: 16:00 - 22:00<br>
-                    Donderdag: 16:00 - 22:00<br>
-                    Vrijdag: 16:00 - 22:00<br>
-                    Zaterdag: 16:00 - 22:00<br>
-                    Zondag: Gesloten<br>
-                </p>
-                </p>
-            </div>
-        </div>
-    </footer>
+
     </body>
     </html>
 

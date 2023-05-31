@@ -18,8 +18,6 @@ class Register
     #[ORM\Column(length: 255)]
     private ?string $payment = null;
 
-    #[ORM\ManyToOne(inversedBy: 'registers')]
-    private ?user $member = null;
 
 
 
@@ -47,17 +45,7 @@ class Register
         return $this;
     }
 
-    public function getMember(): ?user
-    {
-        return $this->member;
-    }
 
-    public function setMember(?user $member): self
-    {
-        $this->member = $member;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, lesson>

@@ -3,26 +3,29 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $username = null;
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $roles = null;
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column(length: 255)]
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
@@ -38,56 +41,75 @@ class User
     private ?\DateTimeInterface $geboortedatum = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $gender = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $adres = null;
+
+    #[ORM\Column(length: 255)]
     private ?string $postcode = null;
 
     #[ORM\Column(length: 255)]
     private ?string $woonplaats = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
-
-    #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Lesson::class)]
-    private Collection $lessons;
-
-    #[ORM\OneToMany(mappedBy: 'member', targetEntity: Register::class)]
-    private Collection $registers;
-
-    public function __construct()
-    {
-        $this->lessons = new ArrayCollection();
-        $this->registers = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getUsername(): ?string
+    public function getEmail(): ?string
     {
-        return $this->username;
+        return $this->email;
     }
 
-    public function setUsername(string $username): self
+    public function setEmail(string $email): self
     {
-        $this->username = $username;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getRoles(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
     {
-        return $this->roles;
+        return (string) $this->email;
     }
 
-    public function setRoles(string $roles): self
+    /**
+     * @deprecated since Symfony 5.3, use getUserIdentifier instead
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -97,6 +119,26 @@ class User
         $this->password = $password;
 
         return $this;
+    }
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getVoornaam(): ?string
@@ -147,6 +189,30 @@ class User
         return $this;
     }
 
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(string $gender): self
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getAdres(): ?string
+    {
+        return $this->adres;
+    }
+
+    public function setAdres(string $adres): self
+    {
+        $this->adres = $adres;
+
+        return $this;
+    }
+
     public function getPostcode(): ?string
     {
         return $this->postcode;
@@ -167,78 +233,6 @@ class User
     public function setWoonplaats(string $woonplaats): self
     {
         $this->woonplaats = $woonplaats;
-
-        return $this;
-    }
-
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Lesson>
-     */
-    public function getLessons(): Collection
-    {
-        return $this->lessons;
-    }
-
-    public function addLesson(Lesson $lesson): self
-    {
-        if (!$this->lessons->contains($lesson)) {
-            $this->lessons->add($lesson);
-            $lesson->setInstructor($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLesson(Lesson $lesson): self
-    {
-        if ($this->lessons->removeElement($lesson)) {
-            // set the owning side to null (unless already changed)
-            if ($lesson->getInstructor() === $this) {
-                $lesson->setInstructor(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Register>
-     */
-    public function getRegisters(): Collection
-    {
-        return $this->registers;
-    }
-
-    public function addRegister(Register $register): self
-    {
-        if (!$this->registers->contains($register)) {
-            $this->registers->add($register);
-            $register->setMember($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRegister(Register $register): self
-    {
-        if ($this->registers->removeElement($register)) {
-            // set the owning side to null (unless already changed)
-            if ($register->getMember() === $this) {
-                $register->setMember(null);
-            }
-        }
 
         return $this;
     }
