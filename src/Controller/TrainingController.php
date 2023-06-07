@@ -66,15 +66,14 @@ class TrainingController extends AbstractController
 
         $form->handleRequest($request);
 
-        $plaintextPassword = '';
 
-        $hashedPassword = $passwordHasher->hashPassword($user, $plaintextPassword);
 
 
 
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $user->setPassword($hashedPassword);
+
+            $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
             $em->persist($user);
             $em->flush();
 
