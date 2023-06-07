@@ -52,16 +52,12 @@ class TrainingController extends AbstractController
 
     }
     #[Route('/register', name: 'register')]
-    public function register(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function register(Request $request, EntityManagerInterface $em): Response
     {
 
         $register = $em->getRepository(User::class)->findAll();
-        $user = new User(...);
-        $plaintextPassword = ...;
-          $hashedPassword = $passwordHasher->hashPassword(
-              $user,
-              $plaintextPassword);
-          $user->setPassword($hashedPassword);
+        $user = new User();
+
 
         $form = $this->createForm(RegisterType::class, $user);
 
