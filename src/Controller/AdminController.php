@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Training;
 use App\Form\TrainingType;
+use App\Form\UpdateType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +39,7 @@ class AdminController extends AbstractController
                 'notice',
                 'het item is toegevoegd'
             );
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('crud');
 
         }
 
@@ -59,14 +60,30 @@ class AdminController extends AbstractController
     }
 
     #[Route('/update/{id}', name: 'updateTraining')]
-    public function update(EntityManagerInterface $entityManager): Response
+    public function update(Request $request, EntityManagerInterface $em,int $id): Response
     {
-        $training = $entityManager->getRepository(Training::class)->findAll();
+        $auto = $em->getRepository(Training::class)->find($id);
 
+        $form = $this->createForm(UpdateType::class, $auto);
 
-        return $this->render('admin/update.html.twig', [
-            'trainings' => $training
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $add = $form->getData();
+            $em->persist($add);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'het item is verandert'
+            );
+            return $this->redirectToRoute('crud');
+        }
+
+        return $this->renderForm('admin/update.html.twig', [
+            'form' => $form
+
         ]);
+
     }
     #[Route('/delete/{id}', name: 'deleteTraining')]
     public function delete(EntityManagerInterface $entityManager, int $id): Response
@@ -80,10 +97,9 @@ class AdminController extends AbstractController
             'notice',
             'het item is verwijdert'
         );
-        return $this->redirectToRoute('admin');
+        return $this->redirectToRoute('crud');
     }
 
-        return $this->render(
-            "delete.html.twig",['autos' => $product]);
+
     }
 }
