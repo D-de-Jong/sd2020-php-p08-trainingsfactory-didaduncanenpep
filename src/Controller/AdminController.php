@@ -47,5 +47,43 @@ class AdminController extends AbstractController
 
         ]);
     }
+    #[Route('/training-crud', name: 'crud')]
+    public function crud(EntityManagerInterface $entityManager): Response
+    {
+        $training = $entityManager->getRepository(Training::class)->findAll();
 
+
+        return $this->render('admin/crud.html.twig', [
+            'trainings' => $training
+        ]);
+    }
+
+    #[Route('/update/{id}', name: 'updateTraining')]
+    public function update(EntityManagerInterface $entityManager): Response
+    {
+        $training = $entityManager->getRepository(Training::class)->findAll();
+
+
+        return $this->render('admin/update.html.twig', [
+            'trainings' => $training
+        ]);
+    }
+    #[Route('/delete/{id}', name: 'deleteTraining')]
+    public function delete(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $product = $entityManager->getRepository(Training::class)->find($id);{
+
+
+        $entityManager->remove($product);
+        $entityManager->flush();
+        $this->addFlash(
+            'notice',
+            'het item is verwijdert'
+        );
+        return $this->redirectToRoute('admin');
+    }
+
+        return $this->render(
+            "delete.html.twig",['autos' => $product]);
+    }
 }

@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table">
+
+    <thead>
+    <tr>
+        <th scope="col">nummer</th>
+        <th scope="col">model</th>
+        <th scope="col">type</th>
+    </tr>
+    </thead>
+
+    {% for training in trainings %}
+
+        <tr>
+
+            <th scope="row">{{ training.id }}</th>
+            <td>{{ training.name }}</td>
+            <td>{{ training.description }}</td>
+            <td> <a href="{{ path('updateTraining',{'id':training.id}) }}">update</a></td>
+            <td> <a href="{{ path('deleteTraining',{'id':training.id}) }}">delete</a></td>
+
+
+
+        </tr>
+    {% endfor %}
+    </table>
+    </tbody>
+    <a href="/add-training"> voeg auto toe</a>
+
+{% endblock %}
