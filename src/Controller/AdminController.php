@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 use App\Entity\Training;
+use App\Entity\User;
 use App\Form\TrainingType;
 use App\Form\UpdateType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -101,5 +102,35 @@ class AdminController extends AbstractController
     }
 
 
+    }
+    #[Route('/members', name: 'members')]
+    public function allMembers(EntityManagerInterface $entityManager): Response
+    {
+        $member = $entityManager->getRepository(User::class)->findAll();
+
+
+        return $this->render('admin/leden.html.twig', [
+            'members' => $member
+        ]);
+    }
+    #[Route('/updatemember/{id}', name: 'updateMember')]
+    public function updateMembers(EntityManagerInterface $entityManager): Response
+    {
+        $member = $entityManager->getRepository(User::class)->findAll();
+
+
+        return $this->render('admin/updateMember.html.twig', [
+            'members' => $member
+        ]);
+    }
+    #[Route('/deletemember/{id}', name: 'deleteMember')]
+    public function deleteMembers(EntityManagerInterface $entityManager): Response
+    {
+        $member = $entityManager->getRepository(User::class)->findAll();
+
+
+        return $this->render('admin/deleteMember.html.twig', [
+            'members' => $member
+        ]);
     }
 }
