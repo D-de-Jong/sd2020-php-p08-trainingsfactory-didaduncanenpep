@@ -12,6 +12,7 @@
         </thead>
 
         {% for member in members %}
+            {% if 'ROLE_KLANT' in member.roles %}
 
             <tr>
 
@@ -31,6 +32,7 @@
 
 
             </tr>
+            {% endif %}
         {% endfor %}
     </table>
     </tbody>
