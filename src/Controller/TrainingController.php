@@ -97,6 +97,9 @@ class TrainingController extends AbstractController
         if ($security->isGranted('ROLE_KLANT')) {
             return $this->redirectToRoute('app_klant');
         }
+        if ($security->isGranted('ROLE_INSTRUCTOR')) {
+            return $this->redirectToRoute('app_instructor');
+        }
         return $this ->$this->redirectToRoute('app_default');
 
     }
