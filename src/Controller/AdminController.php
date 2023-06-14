@@ -63,9 +63,9 @@ class AdminController extends AbstractController
     #[Route('/update/{id}', name: 'updateTraining')]
     public function update(Request $request, EntityManagerInterface $em,int $id): Response
     {
-        $auto = $em->getRepository(Training::class)->find($id);
+        $training = $em->getRepository(Training::class)->find($id);
 
-        $form = $this->createForm(UpdateType::class, $auto);
+        $form = $this->createForm(UpdateType::class, $training);
 
         $form->handleRequest($request);
 
