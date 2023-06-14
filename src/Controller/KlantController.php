@@ -2,16 +2,20 @@
 
 namespace App\Controller;
 
-use App\Entity\Training;
+
 use App\Entity\User;
 use App\Form\ProfileType;
+use App\Form\UpdateType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class KlantController extends AbstractController
+class   KlantController extends AbstractController
 {
     #[Route('/klant', name: 'app_klant')]
     public function index(): Response
@@ -21,31 +25,32 @@ class KlantController extends AbstractController
         ]);
     }
     #[Route('/profile', name: 'profile')]
-    public function crud(Request $request, EntityManagerInterface $em): Response
+    public function profile(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {
-        $profile = $em->getRepository(User::class)->findAll();
+        $user = $this->getUser();
 
-        $form = $this->createForm(ProfileType::class, $profile);
-
+        $form = $this->createForm(ProfileType::class,$user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $add = $form->getData();
-            $em->persist($add);
-            $em->flush();
-            $this->addFlash(
-                'notice',
-                'het item is verandert'
+            $user = $form->getData();
+
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('password')->getData()
+                )
             );
-            return $this->redirectToRoute('home');
+            $userRepository->save($user);
+
+            return $this->redirectToRoute('profile');
+
         }
 
-        return $this->renderForm('klant/profile.html.twig', [
-            'form' => $form
 
+        return $this->renderForm('klant/profile.html.twig',[
+            'form'=> $form
         ]);
-
-
     }
 
 }

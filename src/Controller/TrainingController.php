@@ -71,6 +71,7 @@ class TrainingController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $user = $form->getData();
 
             $user->setPassword($passwordHasher->hashPassword($user, $user->getPassword()));
@@ -78,7 +79,7 @@ class TrainingController extends AbstractController
             $em->flush();
 
             $this->addFlash('succes', 'Uw bestelling is doorgestuurd!');
-            //  return $this->redirectToRoute('app_index');
+             return $this->redirectToRoute('home');
         }
 
         return $this->renderForm('training/register.html.twig', [
