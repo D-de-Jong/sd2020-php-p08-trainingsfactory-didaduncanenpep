@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 class   KlantController extends AbstractController
 {
@@ -35,15 +37,10 @@ class   KlantController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
 
-            $user->setPassword(
-                $userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
-            $userRepository->save($user);
 
-            return $this->redirectToRoute('profile');
+            $userRepository->save($user, true);
+
+            return $this->redirectToRoute('app_klant');
 
         }
 
@@ -52,5 +49,10 @@ class   KlantController extends AbstractController
             'form'=> $form
         ]);
     }
-
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        // controller can be blank: it will never be called!
+        throw new \Exception('Don\'t forget to activate logout in security.yaml');
+    }
 }

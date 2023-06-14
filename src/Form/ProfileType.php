@@ -13,14 +13,7 @@ class ProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email')
-            ->add('password')
-            ->add('voornaam')
-            ->add('tussenvoegsel')
-            ->add('achternaam')
-            ->add('geboortedatum')
-            ->add('gender')
-            ->add('adres')
+
             ->add('postcode')
             ->add('woonplaats')
             ->add('Save', SubmitType::class)

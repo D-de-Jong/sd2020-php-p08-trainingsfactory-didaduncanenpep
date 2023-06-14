@@ -1,6 +1,6 @@
-app_logout:
-  path: /logout
-  methods: POST
+#app_logout:
+#  path: /logout
+#  methods: POST
   #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
