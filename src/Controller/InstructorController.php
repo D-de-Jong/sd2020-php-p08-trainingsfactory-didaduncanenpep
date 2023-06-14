@@ -15,4 +15,5 @@ class InstructorController extends AbstractController
             'controller_name' => 'instructorController',
         ]);
     }
+
 }

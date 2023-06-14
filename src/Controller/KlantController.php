@@ -15,4 +15,5 @@ class KlantController extends AbstractController
             'controller_name' => 'KlantController',
         ]);
     }
+
 }
