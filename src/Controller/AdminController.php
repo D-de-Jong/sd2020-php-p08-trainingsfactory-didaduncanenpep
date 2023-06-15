@@ -156,8 +156,17 @@ class AdminController extends AbstractController
     }
 
     }
-    #[Route('/instructor', name: 'instructor')]
-    public function allInstructor(EntityManagerInterface $em, int $id): Response
+    #[Route('/instructor-crud', name: 'instructor-crud')]
+    public function allInstructor(EntityManagerInterface $entityManager): Response
+    {
+        $member = $entityManager->getRepository(User::class)->findAll();
+
+
+        return $this->render('admin/instructor.html.twig', [
+            'members' => $member]);
+    }
+    #[Route('/update-instructor/{id}', name: 'updateInstructor')]
+    public function updateInstructor(Request $request, EntityManagerInterface $em,int $id): Response
     {
         $training = $em->getRepository(User::class)->find($id);
 
@@ -176,20 +185,9 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('members');
         }
 
-        return $this->renderForm('admin/updatemember.html.twig', [
+        return $this->renderForm('admin/updateinstructor.html.twig', [
             'form' => $form
 
-        ]);
-
-    }
-    #[Route('/update-instructor/{id}', name: 'updateInstructor')]
-    public function updateInstructor(Request $request, EntityManagerInterface $em,int $id): Response
-    {
-        $member = $entityManager->getRepository(User::class)->findAll();
-
-
-        return $this->render('admin/instructor.html.twig', [
-            'members' => $member
         ]);
     }
 }
