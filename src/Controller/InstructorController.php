@@ -38,7 +38,7 @@ class InstructorController extends AbstractController
                 'notice',
                 'het item is toegevoegd'
             );
-            return $this->redirectToRoute('instructor');
+            return $this->redirectToRoute('app_instructor');
 
         }
 

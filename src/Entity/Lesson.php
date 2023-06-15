@@ -28,18 +28,14 @@ class Lesson
     #[ORM\Column]
     private ?int $max_person = null;
 
-    #[ORM\ManyToOne(inversedBy: 'lessons')]
-    private ?training $training = null;
-
-
-
+    #[ORM\ManyToOne(inversedBy: 'training')]
+    private ?Training $training = null;
 
 
     public function __construct()
     {
         $this->registers = new ArrayCollection();
     }
-
 
 
     public function getId(): ?int
@@ -95,8 +91,17 @@ class Lesson
         return $this;
     }
 
+    public function getTraining(): ?Training
+    {
+        return $this->training;
+    }
 
+    public function setTraining(?Training $training): self
+    {
+        $this->training = $training;
 
+        return $this;
+    }
 
 
 }

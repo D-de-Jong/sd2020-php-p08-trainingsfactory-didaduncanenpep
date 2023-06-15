@@ -3,7 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Lesson;
+use App\Entity\Training;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -16,8 +19,13 @@ class LessonType extends AbstractType
             ->add('time')
             ->add('location')
             ->add('max_person')
-            ->add('training')
-        ;
+            ->add('training' , EntityType::class, [
+                'class' => Training::class,
+                'choice_label' => 'name',
+            ])
+        ->add('Save', SubmitType::class)
+
+    ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -29,11 +29,12 @@ class Training
     private ?int $duration = null;
 
     #[ORM\OneToMany(mappedBy: 'training', targetEntity: Lesson::class)]
-    private Collection $lessons;
+    private Collection $training;
 
     public function __construct()
     {
         $this->lessons = new ArrayCollection();
+        $this->training = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,27 +93,27 @@ class Training
     /**
      * @return Collection<int, Lesson>
      */
-    public function getLessons(): Collection
+    public function getTraining(): Collection
     {
-        return $this->lessons;
+        return $this->training;
     }
 
-    public function addLesson(Lesson $lesson): self
+    public function addTraining(Lesson $training): self
     {
-        if (!$this->lessons->contains($lesson)) {
-            $this->lessons->add($lesson);
-            $lesson->setTraining($this);
+        if (!$this->training->contains($training)) {
+            $this->training->add($training);
+            $training->setTraining($this);
         }
 
         return $this;
     }
 
-    public function removeLesson(Lesson $lesson): self
+    public function removeTraining(Lesson $training): self
     {
-        if ($this->lessons->removeElement($lesson)) {
+        if ($this->training->removeElement($training)) {
             // set the owning side to null (unless already changed)
-            if ($lesson->getTraining() === $this) {
-                $lesson->setTraining(null);
+            if ($training->getTraining() === $this) {
+                $training->setTraining(null);
             }
         }
 
