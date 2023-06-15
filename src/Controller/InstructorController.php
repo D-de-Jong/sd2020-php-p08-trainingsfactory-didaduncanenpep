@@ -21,7 +21,7 @@ class InstructorController extends AbstractController
             'controller_name' => 'instructorController',
         ]);
     }
-    #[Route('/add-training', name: 'addtraining')]
+    #[Route('/add-lesson', name: 'add-lesson')]
     public function showInsert(Request $request, EntityManagerInterface $em): Response
     {
         $genre = $em->getRepository(Lesson::class)->findAll();
