@@ -141,17 +141,49 @@ class AdminController extends AbstractController
 
     }
     #[Route('/deletemember/{id}', name: 'deleteMember')]
-    public function deleteMembers(EntityManagerInterface $entityManager): Response
+    public function deleteMembers(EntityManagerInterface $entityManager, int $id): Response
     {
-        $member = $entityManager->getRepository(User::class)->findAll();
+        $product = $entityManager->getRepository(User::class)->find($id);{
 
 
-        return $this->render('admin/deleteMember.html.twig', [
-            'members' => $member
-        ]);
+        $entityManager->remove($product);
+        $entityManager->flush();
+        $this->addFlash(
+            'notice',
+            'het item is verwijdert'
+        );
+        return $this->redirectToRoute('members');
+    }
+
     }
     #[Route('/instructor', name: 'instructor')]
-    public function allInstructor(EntityManagerInterface $entityManager): Response
+    public function allInstructor(EntityManagerInterface $em, int $id): Response
+    {
+        $training = $em->getRepository(User::class)->find($id);
+
+        $form = $this->createForm(RegisterType::class, $training);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $add = $form->getData();
+            $em->persist($add);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'het item is verandert'
+            );
+            return $this->redirectToRoute('members');
+        }
+
+        return $this->renderForm('admin/updatemember.html.twig', [
+            'form' => $form
+
+        ]);
+
+    }
+    #[Route('/update-instructor/{id}', name: 'updateInstructor')]
+    public function updateInstructor(Request $request, EntityManagerInterface $em,int $id): Response
     {
         $member = $entityManager->getRepository(User::class)->findAll();
 
