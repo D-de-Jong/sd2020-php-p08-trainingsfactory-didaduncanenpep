@@ -3,6 +3,7 @@
 namespace App\Controller;
 use App\Entity\Training;
 use App\Entity\User;
+use App\Form\RegisterType;
 use App\Form\TrainingType;
 use App\Form\UpdateType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -114,14 +115,30 @@ class AdminController extends AbstractController
         ]);
     }
     #[Route('/updatemember/{id}', name: 'updateMember')]
-    public function updateMembers(EntityManagerInterface $entityManager): Response
+    public function updateMember(Request $request, EntityManagerInterface $em,int $id): Response
     {
-        $member = $entityManager->getRepository(User::class)->findAll();
+        $training = $em->getRepository(User::class)->find($id);
 
+        $form = $this->createForm(RegisterType::class, $training);
 
-        return $this->render('admin/updateMember.html.twig', [
-            'members' => $member
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $add = $form->getData();
+            $em->persist($add);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'het item is verandert'
+            );
+            return $this->redirectToRoute('members');
+        }
+
+        return $this->renderForm('admin/updatemember.html.twig', [
+            'form' => $form
+
         ]);
+
     }
     #[Route('/deletemember/{id}', name: 'deleteMember')]
     public function deleteMembers(EntityManagerInterface $entityManager): Response
@@ -133,5 +150,14 @@ class AdminController extends AbstractController
             'members' => $member
         ]);
     }
+    #[Route('/instructor', name: 'instructor')]
+    public function allInstructor(EntityManagerInterface $entityManager): Response
+    {
+        $member = $entityManager->getRepository(User::class)->findAll();
 
+
+        return $this->render('admin/instructor.html.twig', [
+            'members' => $member
+        ]);
+    }
 }

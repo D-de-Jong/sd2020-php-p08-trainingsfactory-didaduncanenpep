@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <table class="table">
+
+        <thead>
+        <tr>
+            <th scope="col">nummer</th>
+            <th scope="col">model</th>
+            <th scope="col">type</th>
+        </tr>
+        </thead>
+
+        {% for member in members %}
+            {% if 'ROLE_INSTRUCTOR' in member.roles %}
+
+                <tr>
+
+                    <th scope="row">{{ member.id }}</th>
+                    <td>{{ member.email }}</td>
+                    <td>{{ member.voornaam }}</td>
+                    <td>{{ member.tussenvoegsel }}</td>
+                    <td>{{ member.achternaam }}</td>
+                    <td>{{ member.gender }}</td>
+                    <td>{{ member.adres  }}</td>
+                    <td>{{ member.postcode }}</td>
+                    <td>{{ member.woonplaats }}</td>
+                    <td> <a href="{{ path('updateInstructor',{'id':member.id}) }}">update</a></td>
+
+
+
+
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </table>
+    </tbody>
+
+
+{% endblock %}
