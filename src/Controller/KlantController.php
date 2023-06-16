@@ -79,7 +79,7 @@ class   KlantController extends AbstractController
         ;
 
         $registration->setLesson($lesson);
-        $entityManager->persist($user);
+        $entityManager->persist($registration);
 
         $entityManager->flush();
         $this->addFlash(
