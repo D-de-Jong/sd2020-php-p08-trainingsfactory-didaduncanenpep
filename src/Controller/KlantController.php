@@ -74,9 +74,10 @@ class   KlantController extends AbstractController
 //
         $user = $this->getUser();
 
+
         $registration = new Register();
         $registration->setMember($user);
-        ;
+
 
         $registration->setLesson($lesson);
         $entityManager->persist($registration);
