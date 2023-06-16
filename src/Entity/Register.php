@@ -19,20 +19,10 @@ class Register
     private ?string $payment = null;
 
     #[ORM\ManyToOne(inversedBy: 'registers')]
-    private ?lesson $lesson = null;
+    private ?Lesson $lesson = null;
 
     #[ORM\ManyToOne(inversedBy: 'registers')]
     private ?User $member = null;
-
-
-
-
-
-
-    public function __construct()
-    {
-        $this->lesson = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -51,13 +41,7 @@ class Register
         return $this;
     }
 
-
-
-    /**
-     * @return Collection<int, lesson>
-     */
-
-    public function getLesson(): ?lesson
+    public function getLesson(): ?Lesson
     {
         return $this->lesson;
     }

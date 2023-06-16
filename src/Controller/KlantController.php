@@ -67,22 +67,23 @@ class   KlantController extends AbstractController
             'lessons' => $training
         ]);
     }
-    #[Route('/join-lessons', name: 'join-lesson')]
+    #[Route('/join-lessons/{id}', name: 'join-lesson')]
     public function joinlesson(EntityManagerInterface $entityManager, int $id): Response
     {
-        $training = $entityManager->getRepository(Lesson::class)->find($id);
+        $lesson = $entityManager->getRepository(Register::class)->find($id);
+//
         $user = $this->getUser();
 
         $registration = new Register();
+//        dd($lesson);
         $registration->setMember($user);
-        $registration->setLesson();
 
-        $entityManager->persist();
+        $registration->setLesson($lesson);
+        $entityManager->persist($user);
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('klant/lessons.html.twig', [
-            'lessons' => $training
-        ]);
+        return $this->redirectToRoute('app_klant')
+        ;
     }
 }
