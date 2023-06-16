@@ -70,19 +70,22 @@ class   KlantController extends AbstractController
     #[Route('/join-lessons/{id}', name: 'join-lesson')]
     public function joinlesson(EntityManagerInterface $entityManager, int $id): Response
     {
-        $lesson = $entityManager->getRepository(Register::class)->find($id);
+        $lesson = $entityManager->getRepository(Lesson::class)->find($id);
 //
         $user = $this->getUser();
 
         $registration = new Register();
-//        dd($lesson);
         $registration->setMember($user);
+        ;
 
         $registration->setLesson($lesson);
         $entityManager->persist($user);
+
         $entityManager->flush();
-
-
+        $this->addFlash(
+            'notice',
+            'het item is toegevoegd'
+        );
         return $this->redirectToRoute('app_klant')
         ;
     }
