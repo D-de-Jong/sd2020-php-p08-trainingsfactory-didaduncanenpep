@@ -18,6 +18,12 @@ class Register
     #[ORM\Column(length: 255)]
     private ?string $payment = null;
 
+    #[ORM\ManyToOne(inversedBy: 'registers')]
+    private ?lesson $lesson = null;
+
+    #[ORM\ManyToOne(inversedBy: 'registers')]
+    private ?User $member = null;
+
 
 
 
@@ -50,6 +56,30 @@ class Register
     /**
      * @return Collection<int, lesson>
      */
+
+    public function getLesson(): ?lesson
+    {
+        return $this->lesson;
+    }
+
+    public function setLesson(?lesson $lesson): self
+    {
+        $this->lesson = $lesson;
+
+        return $this;
+    }
+
+    public function getMember(): ?User
+    {
+        return $this->member;
+    }
+
+    public function setMember(?User $member): self
+    {
+        $this->member = $member;
+
+        return $this;
+    }
 
 
 

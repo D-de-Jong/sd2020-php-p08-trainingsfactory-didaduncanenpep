@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 class AdminController extends AbstractController
@@ -186,6 +187,51 @@ class AdminController extends AbstractController
         }
 
         return $this->renderForm('admin/updateinstructor.html.twig', [
+            'form' => $form
+
+        ]);
+    }
+    #[Route('/deleteinstructor/{id}', name: 'deleteInstructor')]
+    public function deleteInstructor(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $product = $entityManager->getRepository(User::class)->find($id);{
+
+
+        $entityManager->remove($product);
+        $entityManager->flush();
+        $this->addFlash(
+            'notice',
+            'het item is verwijdert'
+        );
+        return $this->redirectToRoute('members');
+    }
+
+    }
+    #[Route('/insertinstructor', name: 'addtraining')]
+    public function insertInstructor(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    {
+        $genre = $em->getRepository(User::class)->findAll();
+        $add = new User();
+        $add->setRoles(array('ROLE_INSTRUCTOR'));
+        $form = $this->createForm(RegisterType::class, $add);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $add = $form->getData();
+            $add->setPassword($passwordHasher->hashPassword($add, $add->getPassword()));
+
+            $em->persist($add);
+            $em->flush();
+            $this->addFlash(
+                'notice',
+                'het item is toegevoegd'
+            );
+            return $this->redirectToRoute('instructor-crud');
+
+        }
+
+        return $this->renderForm('admin/training.html.twig', [
             'form' => $form
 
         ]);

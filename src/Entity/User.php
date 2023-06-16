@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -51,6 +53,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 255)]
     private ?string $woonplaats = null;
+
+    #[ORM\OneToMany(mappedBy: 'instructor', targetEntity: Lesson::class)]
+    private Collection $lessons;
+
+    #[ORM\OneToMany(mappedBy: 'member', targetEntity: Register::class)]
+    private Collection $registers;
+
+    public function __construct()
+    {
+        $this->lessons = new ArrayCollection();
+        $this->registers = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -233,6 +247,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWoonplaats(string $woonplaats): self
     {
         $this->woonplaats = $woonplaats;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Lesson>
+     */
+    public function getLessons(): Collection
+    {
+        return $this->lessons;
+    }
+
+    public function addLesson(Lesson $lesson): self
+    {
+        if (!$this->lessons->contains($lesson)) {
+            $this->lessons->add($lesson);
+            $lesson->setInstructor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLesson(Lesson $lesson): self
+    {
+        if ($this->lessons->removeElement($lesson)) {
+            // set the owning side to null (unless already changed)
+            if ($lesson->getInstructor() === $this) {
+                $lesson->setInstructor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Register>
+     */
+    public function getRegisters(): Collection
+    {
+        return $this->registers;
+    }
+
+    public function addRegister(Register $register): self
+    {
+        if (!$this->registers->contains($register)) {
+            $this->registers->add($register);
+            $register->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegister(Register $register): self
+    {
+        if ($this->registers->removeElement($register)) {
+            // set the owning side to null (unless already changed)
+            if ($register->getMember() === $this) {
+                $register->setMember(null);
+            }
+        }
 
         return $this;
     }

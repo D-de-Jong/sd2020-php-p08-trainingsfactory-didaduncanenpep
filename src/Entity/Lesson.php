@@ -31,6 +31,12 @@ class Lesson
     #[ORM\ManyToOne(inversedBy: 'training')]
     private ?Training $training = null;
 
+    #[ORM\OneToMany(mappedBy: 'lesson', targetEntity: Register::class)]
+    private Collection $registers;
+
+    #[ORM\ManyToOne(inversedBy: 'lessons')]
+    private ?User $instructor = null;
+
 
     public function __construct()
     {
@@ -99,6 +105,48 @@ class Lesson
     public function setTraining(?Training $training): self
     {
         $this->training = $training;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Register>
+     */
+    public function getRegisters(): Collection
+    {
+        return $this->registers;
+    }
+
+    public function addRegister(Register $register): self
+    {
+        if (!$this->registers->contains($register)) {
+            $this->registers->add($register);
+            $register->setLesson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRegister(Register $register): self
+    {
+        if ($this->registers->removeElement($register)) {
+            // set the owning side to null (unless already changed)
+            if ($register->getLesson() === $this) {
+                $register->setLesson(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getInstructor(): ?User
+    {
+        return $this->instructor;
+    }
+
+    public function setInstructor(?User $instructor): self
+    {
+        $this->instructor = $instructor;
 
         return $this;
     }
