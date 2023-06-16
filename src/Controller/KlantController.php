@@ -77,6 +77,7 @@ class   KlantController extends AbstractController
 
         $registration = new Register();
         $registration->setMember($user);
+        $registration->setPayment('10');
 
 
         $registration->setLesson($lesson);
@@ -85,7 +86,7 @@ class   KlantController extends AbstractController
         $entityManager->flush();
         $this->addFlash(
             'notice',
-            'het item is toegevoegd'
+            'je hebt de les gejoind'
         );
         return $this->redirectToRoute('app_klant')
         ;
