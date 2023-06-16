@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Entity\Lesson;
 use App\Entity\Training;
 use App\Entity\User;
 use App\Form\RegisterType;
@@ -236,4 +237,5 @@ class AdminController extends AbstractController
 
         ]);
     }
+
 }

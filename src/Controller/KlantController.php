@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 
+use App\Entity\Lesson;
+use App\Entity\Register;
 use App\Entity\User;
 use App\Form\ProfileType;
 use App\Form\UpdateType;
@@ -54,5 +56,25 @@ class   KlantController extends AbstractController
     {
         // controller can be blank: it will never be called!
         throw new \Exception('Don\'t forget to activate logout in security.yaml');
+    }
+    #[Route('/lessons', name: 'lessons')]
+    public function lessons(EntityManagerInterface $entityManager): Response
+    {
+        $training = $entityManager->getRepository(Lesson::class)->findAll();
+
+
+        return $this->render('klant/lessons.html.twig', [
+            'lessons' => $training
+        ]);
+    }
+    #[Route('/join-lessons', name: 'join-lesson')]
+    public function joinlesson(EntityManagerInterface $entityManager): Response
+    {
+        $training = $entityManager->getRepository(Register::class)->findAll();
+
+
+        return $this->render('klant/lessons.html.twig', [
+            'lessons' => $training
+        ]);
     }
 }
