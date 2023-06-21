@@ -26,7 +26,7 @@ class AdminController extends AbstractController
             'trainings' => $training
         ]);
     }
-    #[Route('/add-training', name: 'addtraining')]
+    #[Route('/add-training', name: 'add-training')]
     public function showInsert(Request $request, EntityManagerInterface $em): Response
     {
         $genre = $em->getRepository(Training::class)->findAll();
